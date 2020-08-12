@@ -49,8 +49,12 @@ function gridTemplatePlugin({ addUtilities, variants, theme }) {
 		let number = dimensions[direction];
 		let abbreviation = direction.toLowerCase().slice(0, 3);
 
-		for (let i = 1; i <= number; ++i) {
-			for (let description in config) {
+		for (let description in config) {
+			utilities[`.${abbreviation}-${description}`] = {
+				[`gridAuto${capitalizeFirstLetter(direction)}`]: config[description],
+			};
+
+			for (let i = 1; i <= number; ++i) {
 				utilities[`.${abbreviation}-${i}-${description}`] = {
 					[`--grid-${abbreviation}-${i}`]: config[description],
 				};
