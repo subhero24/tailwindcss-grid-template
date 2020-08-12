@@ -1,6 +1,6 @@
 {
 	"name": "tailwindcss-grid-template",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A tailwindCSS plugin for defining grid template utilities",
 	"main": "index.js",
 	"scripts": {
