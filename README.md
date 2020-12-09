@@ -28,7 +28,7 @@ Then you can specify the size each column or row seperately with utility classes
 <div class="grid grid-cols-2 col-1-auto col-2-fr"></div>
 ```
 
-Configuration of the values is done under the `gridTemplateRow` and ``gridTemplateColumn` key in the tailwind config.
+Configuration of the values is done under the `gridTemplateRow` and `gridTemplateColumn` key in the tailwind config.
 
 Default configuration looks like
 
