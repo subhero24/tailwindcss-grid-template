@@ -2,67 +2,71 @@ let plugin = require("tailwindcss/plugin");
 
 let defaultOptions = {
 	theme: {
-		gridTemplate: {
+		gridTemplateRow: {
 			fr: "1fr",
-			auto: "auto",
-			full: "100%",
 			min: "min-content",
 			max: "max-content",
+			auto: "auto",
+			full: "100%",
+			default: "minmax(0,1fr)",
+		},
+		gridTemplateColumn: {
+			fr: "1fr",
+			min: "min-content",
+			max: "max-content",
+			auto: "auto",
+			full: "100%",
+			default: "minmax(0,1fr)",
 		},
 	},
 	variants: {
-		gridTemplate: ["responsive"],
+		gridTemplateRow: ["responsive"],
+		gridTemplateColumn: ["responsive"],
 	},
 };
 
 function gridTemplatePlugin({ addUtilities, variants, theme }) {
-	const dimensions = { rows: 6, columns: 6 };
+	const dimensions = { row: 6, column: 6 };
 
 	function capitalizeFirstLetter(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 
-	let utilities = {};
 	for (let direction in dimensions) {
+		let utils = {};
 		let number = dimensions[direction];
-		let abbreviation = direction.toLowerCase().slice(0, 3);
+		let abbreviatedDirection = direction.slice(0, 3);
+		let capitalizedDirection = capitalizeFirstLetter(direction);
+
+		let config = theme(`gridTemplate${capitalizedDirection}`);
+
 		for (let i = 1; i <= number; ++i) {
 			let styles = {};
 			let stylesTemplate = [];
-			let selector = `.grid-${abbreviation}s-${i}`;
+			let selector = `.grid-${abbreviatedDirection}s-${i}`;
 
 			for (let j = 1; j <= i; ++j) {
-				let variable = `--grid-${abbreviation}-${j}`;
+				let variable = `--grid-${abbreviatedDirection}-${j}`;
 
 				styles[variable] = "minmax(0,1fr)";
 				stylesTemplate.push(`var(${variable})`);
 			}
 
-			styles[`gridTemplate${capitalizeFirstLetter(direction)}`] = stylesTemplate.join(" ");
+			styles[`gridTemplate${capitalizedDirection}s`] = stylesTemplate.join(" ");
 
-			utilities[selector] = styles;
+			utils[selector] = styles;
 		}
-	}
-
-	let config = theme("gridTemplate");
-	for (let direction in dimensions) {
-		let number = dimensions[direction];
-		let abbreviation = direction.toLowerCase().slice(0, 3);
 
 		for (let description in config) {
-			utilities[`.${abbreviation}-${description}`] = {
-				[`gridAuto${capitalizeFirstLetter(direction)}`]: config[description],
-			};
-
 			for (let i = 1; i <= number; ++i) {
-				utilities[`.${abbreviation}-${i}-${description}`] = {
-					[`--grid-${abbreviation}-${i}`]: config[description],
+				utils[`.${abbreviatedDirection}-${i}-${description}`] = {
+					[`--grid-${abbreviatedDirection}-${i}`]: config[description],
 				};
 			}
 		}
-	}
 
-	addUtilities(utilities, variants("gridTemplate"));
+		addUtilities(utils, variants(`gridTemplate${capitalizedDirection}`));
+	}
 }
 
 module.exports = plugin(gridTemplatePlugin, defaultOptions);

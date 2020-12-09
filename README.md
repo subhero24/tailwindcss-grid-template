@@ -1,14 +1,16 @@
 # Install
 
 ```
-npm install tailwindcss-grid-template --save-dev
+npm install tailwindcss-grid-template -D
 ```
 
 Add the plugin to your tailwind config file
 
 ```javascript
+const gridTemplatePlugin = require("tailwindcss-grid-template");
+
 module.exports = {
-	plugins: [require("tailwindcss-grid-template")],
+	plugins: [gridTemplatePlugin],
 };
 ```
 
@@ -26,25 +28,33 @@ Then you can specify the size each column or row seperately with utility classes
 <div class="grid grid-cols-2 col-1-auto col-2-fr"></div>
 ```
 
-If you do not specify a column or row number like `row-auto` or `col-full`, the value is used for auto rows/columns.
-
-Configuration of the values is done under the `gridTemplate` key in the tailwind config.
+Configuration of the values is done under the `gridTemplateRow` and ``gridTemplateColumn` key in the tailwind config.
 
 Default configuration looks like
 
 ```js
 module.exports = {
 	theme: {
-		gridTemplate: {
+		gridTemplateRow: {
 			fr: "1fr",
-			auto: "auto",
-			full: "100%",
 			min: "min-content",
 			max: "max-content",
+			auto: "auto",
+			full: "100%",
+			default: "minmax(0,1fr)",
+		},
+		gridTemplateColumn: {
+			fr: "1fr",
+			min: "min-content",
+			max: "max-content",
+			auto: "auto",
+			full: "100%",
+			default: "minmax(0,1fr)",
 		},
 	},
 	variants: {
-		gridTemplate: ["responsive"],
+		gridTemplateRow: ["responsive"],
+		gridTemplateColumn: ["responsive"],
 	},
 };
 ```
